@@ -21,7 +21,7 @@ public class Frame extends JFrame {
     /**
      * Button that will list all items on click
      */
-    private JButton listAll, search, add, decrease;
+    private JButton listAll, search, decrease;
     /**
      * The panels in the main frame
      */
@@ -119,13 +119,56 @@ public class Frame extends JFrame {
 
             }
         });
-
         options.add(listAll);
+
         search = new JButton("Search");
+        search.addActionListener(new ActionListener() {
+            /**
+             * Anonymous listener that will execute the action when the button is pressed
+             * 
+             * @param e The event to listen to
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String search = JOptionPane.showInputDialog("Enter the name or ID of the item you are looking for.");
+                if(search == null) {
+                    return;
+                }
+                String toolSearched = listener.actionPerformed("GET/TOOL/SEARCH-" + search); // Sends a string to the socket for the
+                // server to hear.
+                if (toolSearched.equals("") || toolSearched.equals("Error searching of tool")) {
+                    System.err.println("Error searching for tool");
+                } else {
+                    JOptionPane.showMessageDialog(null, toolSearched, "Item found", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
         options.add(search);
-        add = new JButton("Add Item");
-        options.add(add);
+
         decrease = new JButton("Decrease Item");
+        decrease.addActionListener(new ActionListener() {
+            /**
+             * Anonymous listener that will execute the action when the button is pressed
+             * 
+             * @param e The event to listen to
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String itemName = JOptionPane.showInputDialog("Enter the name of the item you wish to decrease the quantity of.");
+                if(itemName == null) {
+                    return;
+                }
+                String decrease = listener.actionPerformed("TOOL/DECREASE-" + itemName); // Sends a string to the socket for the
+                // server to hear.
+                if (decrease.equals("") || decrease.equals("Error decreasing item quantity")) {
+                    System.err.println("Error decreasing item quantity");
+                } else if(decrease.equals("Not enough quantity")) {
+                    JOptionPane.showMessageDialog(null, "The quantity of " + itemName + " is not high enough to be decreased.", "Item Quantity ", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, ("Item quantity of " + itemName + " has been decreased."), "Item Decreased", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
         options.add(decrease);
     }
 
@@ -137,5 +180,4 @@ public class Frame extends JFrame {
     public void setListener(Listener l) {
         listener = l;
     }
-
 }
