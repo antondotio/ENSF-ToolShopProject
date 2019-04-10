@@ -46,9 +46,10 @@ public class Server {
 							Double.parseDouble(temp[3]), theSupplier);
 					items.add(myItem);
 					theSupplier.getItemList().add(myItem);
-
-					database.insertItem(Integer.parseInt(temp[0]), temp[1], Integer.parseInt(temp[2]),
-							Double.parseDouble(temp[3]), theSupplier.getSupId());
+					// database.insertItem(Integer.parseInt(temp[0]), temp[1],
+					// Integer.parseInt(temp[2]),
+					// Double.parseDouble(temp[3]), theSupplier.getSupId());
+					// items already inserted in database
 				}
 			}
 		} catch (Exception e) {
@@ -78,6 +79,9 @@ public class Server {
 			while ((line = br.readLine()) != null) {
 				String[] temp = line.split(";");
 				suppliers.add(new Supplier(Integer.parseInt(temp[0]), temp[1], temp[2], temp[3]));
+				// database.insertSupplier(Integer.parseInt(temp[0]), temp[1], temp[2],
+				// temp[3]);
+				// suppliers already inserted in the DB
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

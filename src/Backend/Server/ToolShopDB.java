@@ -10,7 +10,8 @@ public class ToolShopDB implements IDBCredentials {
         try {
             conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             createDatabase();
-            createItemTable();
+            // createItemTable(); commented out once created
+            // createSupplierTable();
         } catch (SQLException sqle) {
             System.out.println("SQL Problem");
             sqle.printStackTrace();
@@ -32,7 +33,22 @@ public class ToolShopDB implements IDBCredentials {
             System.out.println("Could NOT create table!");
             sqle.printStackTrace();
         }
-        System.out.println("Created table in given database...");
+        System.out.println("Created item table in given database...");
+    }
+
+    public void createSupplierTable() {
+        String sql = "CREATE TABLE SUPPLIERS " + "(id INTEGER not NULL, " + " name VARCHAR(255), "
+                + " address VARCHAR(255), " + " contName VARCHAR(255), " + " PRIMARY KEY (id))";
+
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException sqle) {
+            System.out.println("Could NOT create table!");
+            sqle.printStackTrace();
+        }
+        System.out.println("Created supplier table in given database...");
     }
 
     public void createDatabase() throws SQLException {
@@ -63,6 +79,23 @@ public class ToolShopDB implements IDBCredentials {
             System.out.println("Error inserting in table");
             sqle.printStackTrace();
         }
+    }
 
+    public void insertSupplier(int id, String name, String address, String contName) {
+        try {
+            String query = "INSERT INTO SUPPLIERS (id, name, address, contName) values(?, ?, ?, ?)";
+            PreparedStatement pStmt = conn.prepareStatement(query);
+            pStmt.setInt(1, id);
+            pStmt.setString(2, name);
+            pStmt.setString(3, address);
+            pStmt.setString(4, contName);
+
+            int rowCount = pStmt.executeUpdate();
+            System.out.println("row Count = " + rowCount);
+            pStmt.close();
+        } catch (SQLException sqle) {
+            System.out.println("Error inserting in table");
+            sqle.printStackTrace();
+        }
     }
 }
