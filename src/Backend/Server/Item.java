@@ -1,7 +1,7 @@
 package Backend.Server;
 
 public class Item {
-	
+
 	private int itemId;
 	private String itemName;
 	private int itemQuantity;
@@ -10,34 +10,34 @@ public class Item {
 	private Supplier theSupplier;
 	private static final int ORDERQUANTITY = 40;
 	private static final int MINIMUMUMBER = 20;
-	
-	public Item (int id, String name, int quanitiy, double price, Supplier sup) {
-		
+
+	public Item(int id, String name, int quanitiy, double price, Supplier sup) {
+
 		itemId = id;
 		itemName = name;
 		itemQuantity = quanitiy;
 		itemPrice = price;
-		sup = theSupplier; 
+		sup = theSupplier;
 		setAlreadyOrdered(false);
 	}
-	
-	public boolean decreaseItemQuantity () {
+
+	public boolean decreaseItemQuantity() {
 		if (itemQuantity > 0) {
 			itemQuantity--;
-		    return true;	
-		}
-		else
+			return true;
+		} else
 			return false;
-			
+
 	}
-	public OrderLine placeOrder (){
+
+	public OrderLine placeOrder() {
 		OrderLine ol;
-		if (getItemQuantity() < MINIMUMUMBER && alreadyOrdered == false){
-			ol = new OrderLine (this, ORDERQUANTITY);
+		if (getItemQuantity() < MINIMUMUMBER && alreadyOrdered == false) {
+			ol = new OrderLine(this, ORDERQUANTITY);
 			alreadyOrdered = true;
 			return ol;
 		}
-	    return null;
+		return null;
 	}
 
 	public int getItemId() {
@@ -71,16 +71,17 @@ public class Item {
 	public void setItemPrice(double itemPrice) {
 		this.itemPrice = itemPrice;
 	}
-	public void setTheSupplier (Supplier sup) {
+
+	public void setTheSupplier(Supplier sup) {
 		theSupplier = sup;
 	}
-	public Supplier getTheSupplier () {
+
+	public Supplier getTheSupplier() {
 		return theSupplier;
 	}
-	
-	public String toString () {
-		return "Item ID: " + itemId + ", Item Name: " + itemName + ", Item Quantity: " + 
-	           itemQuantity + "\n";
+
+	public String toString() {
+		return "Item ID: " + itemId + ",\tItem Name: " + itemName + ",\tItem Quantity: " + itemQuantity + "\n";
 	}
 
 	public boolean isAlreadyOrdered() {

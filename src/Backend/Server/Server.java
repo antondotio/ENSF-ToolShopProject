@@ -10,9 +10,11 @@ public class Server {
 	private PrintWriter socketOut;
 	private ServerSocket serverSocket;
 	private Socket socket;
+	ToolShopDB database;
 
 	public Server(int serv) {
 		try {
+			database = new ToolShopDB();
 			serverSocket = new ServerSocket(serv);
 			System.out.println("Shop is running");
 			socket = serverSocket.accept();
@@ -44,6 +46,9 @@ public class Server {
 							Double.parseDouble(temp[3]), theSupplier);
 					items.add(myItem);
 					theSupplier.getItemList().add(myItem);
+
+					database.insertItem(Integer.parseInt(temp[0]), temp[1], Integer.parseInt(temp[2]),
+							Double.parseDouble(temp[3]), theSupplier.getSupId());
 				}
 			}
 		} catch (Exception e) {
@@ -97,8 +102,7 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
-		Server shopServer = new Server(9788);
-		ToolShopDB database = new ToolShopDB();
+		Server shopServer = new Server(8897);
 		ArrayList<Supplier> suppliers = new ArrayList<>();
 		suppliers = shopServer.readSuppliers(suppliers);
 		Inventory theInventory = new Inventory(shopServer.readItems(suppliers));

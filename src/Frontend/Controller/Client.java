@@ -47,10 +47,11 @@ public class Client {
 
     /**
      * Asks server to get list of items
+     * 
      * @return list of items
      */
     public String displayTools() throws IOException {
-        socketOut.println("GET/TOOL/LIST");
+        sendString("GET/TOOL/LIST");
         String response = socketIn.readLine();
         StringBuilder list = new StringBuilder();
         while (!response.equals("DONE")) {
@@ -59,5 +60,10 @@ public class Client {
             response = socketIn.readLine();
         }
         return list.toString();
+    }
+
+    public void sendString(String s) {
+        socketOut.println(s);
+        socketOut.flush();
     }
 }
