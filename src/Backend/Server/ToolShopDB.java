@@ -100,7 +100,7 @@ public class ToolShopDB implements IDBCredentials {
         }
     }
 
-    public String getItems() {
+    public String getItemList() {
         try {
             Statement stmt = conn.createStatement();
             String query = "SELECT * FROM ITEMS";
@@ -112,9 +112,48 @@ public class ToolShopDB implements IDBCredentials {
             }
             return sb.toString();
         } catch (SQLException sqle) {
-            System.out.println("Error getting item");
+            System.out.println("Error getting item list");
             sqle.printStackTrace();
         }
         return "";
     }
+
+    public String getItem(String n) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE name = '" + n + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            String item = "";
+            if (rs.next()) {
+                item = "Item ID: " + rs.getInt("id") + ", Item Name: " + rs.getString("name") + ", Item Quantity: "
+                        + rs.getInt("quantity") + ", Item Price: $" + String.format("%.2f", rs.getDouble("price"))
+                        + ", Supplier ID: " + rs.getInt("suppID");
+            }
+            return item;
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "nothing";
+    }
+
+    public String getItem(int i) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE id = '" + i + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            String item = "";
+            if (rs.next()) {
+                item = "Item ID: " + rs.getInt("id") + ", Item Name: " + rs.getString("name") + ", Item Quantity: "
+                        + rs.getInt("quantity") + ", Item Price: $" + String.format("%.2f", rs.getDouble("price"))
+                        + ", Supplier ID: " + rs.getInt("suppID");
+            }
+            return item;
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "nothing";
+    }
+
 }

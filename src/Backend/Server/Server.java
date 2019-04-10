@@ -95,19 +95,18 @@ public class Server {
 			try {
 				input = socketIn.readLine();
 				if (input.equals("GET/TOOL/LIST")) {
-					String output = database.getItems();
+					String output = database.getItemList();
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}
-				
+
 				else if (input.equals("GET/TOOL/SEARCH")) {
 					String search = socketIn.readLine();
 					String output;
-					if(searchByID(search)) {
-						output = theShop.getItem(Integer.parseInt(search));
+					if (searchByID(search)) {
+						output = database.getItem(Integer.parseInt(search));
 					} else {
-						System.out.println(search);
-						output = theShop.getItem(search);
+						output = database.getItem(search);
 					}
 					socketOut.println(output);
 					socketOut.println("DONE");
@@ -116,12 +115,6 @@ public class Server {
 				else if (input.equals("TOOL/DECREASE")) {
 					String itemName = socketIn.readLine();
 					String output = theShop.decreaseItem(itemName);
-					socketOut.println(output);
-					socketOut.println("DONE");
-				}
-
-				else if (input.equals("GET/TOOL/ORDERS")) {
-					String output = theShop.printOrder();
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}
@@ -136,7 +129,7 @@ public class Server {
 		try {
 			Integer.parseInt(in);
 			return true;
-		} catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return false;
 		}
 	}
