@@ -95,7 +95,7 @@ public class Server {
 			try {
 				input = socketIn.readLine();
 				if (input.equals("GET/TOOL/LIST")) {
-					String output = theShop.listAllItems();
+					String output = database.getItems();
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}

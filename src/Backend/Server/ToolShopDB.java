@@ -5,6 +5,7 @@ import java.sql.*;
 public class ToolShopDB implements IDBCredentials {
 
     private Connection conn;
+    private ResultSet rs;
 
     public ToolShopDB() {
         try {
@@ -97,5 +98,23 @@ public class ToolShopDB implements IDBCredentials {
             System.out.println("Error inserting in table");
             sqle.printStackTrace();
         }
+    }
+
+    public String getItems() {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS";
+            rs = stmt.executeQuery(query);
+            StringBuilder sb = new StringBuilder();
+            while (rs.next()) {
+                sb.append("Item ID: " + rs.getInt("id") + ",\tItem Name: " + rs.getString("name") + ",\tItem Quantity: "
+                        + rs.getInt("quantity") + "\n");
+            }
+            return sb.toString();
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "";
     }
 }
