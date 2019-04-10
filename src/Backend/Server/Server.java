@@ -112,9 +112,21 @@ public class Server {
 					socketOut.println("DONE");
 				}
 
+				else if (input.equals("GET/TOOL/QUANTITY")) {
+					String itemQ = socketIn.readLine();
+					String output;
+					if (searchByID(itemQ)) {
+						output = database.getItemQuantity(Integer.parseInt(itemQ));
+					} else {
+						output = database.getItemQuantity(itemQ);
+					}
+					socketOut.println(output);
+					socketOut.println("DONE");
+				}
+
 				else if (input.equals("TOOL/DECREASE")) {
 					String itemName = socketIn.readLine();
-					String output = theShop.decreaseItem(itemName);
+					String output = database.decreaseItem(itemName);
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}

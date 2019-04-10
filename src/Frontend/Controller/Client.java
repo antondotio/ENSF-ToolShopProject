@@ -67,7 +67,7 @@ public class Client {
         socketOut.println(search);
         String response = socketIn.readLine();
         StringBuilder searchResponse = new StringBuilder();
-        while(!response.equals("DONE")) {
+        while (!response.equals("DONE")) {
             searchResponse.append(response);
             searchResponse.append("\n");
             response = socketIn.readLine();
@@ -75,19 +75,32 @@ public class Client {
         return searchResponse.toString();
     }
 
-	public String decreaseTool(String itemName) throws IOException {
+    public String itemQuantity(String itemQ) throws IOException {
+        socketOut.println("GET/TOOL/QUANTITY");
+        socketOut.println(itemQ);
+        String response = socketIn.readLine();
+        StringBuilder searchResponse = new StringBuilder();
+        while (!response.equals("DONE")) {
+            searchResponse.append(response);
+            searchResponse.append("\n");
+            response = socketIn.readLine();
+        }
+        return searchResponse.toString();
+    }
+
+    public String decreaseTool(String itemName) throws IOException {
         socketOut.println("TOOL/DECREASE");
         socketOut.println(itemName);
         String response = socketIn.readLine();
         StringBuilder decreaseResponse = new StringBuilder();
-        while(!response.equals("DONE")) {
+        while (!response.equals("DONE")) {
             decreaseResponse.append(response);
             decreaseResponse.append("\n");
             response = socketIn.readLine();
         }
         return decreaseResponse.toString();
     }
-    
+
     public void sendString(String s) {
         socketOut.println(s);
         socketOut.flush();
