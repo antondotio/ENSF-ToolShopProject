@@ -99,9 +99,45 @@ public class Server {
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}
+				
+				else if (input.equals("GET/TOOL/SEARCH")) {
+					String search = socketIn.readLine();
+					String output;
+					if(searchByID(search)) {
+						output = theShop.getItem(Integer.parseInt(search));
+					} else {
+						System.out.println(search);
+						output = theShop.getItem(search);
+					}
+					socketOut.println(output);
+					socketOut.println("DONE");
+				}
+
+				else if (input.equals("TOOL/DECREASE")) {
+					String itemName = socketIn.readLine();
+					String output = theShop.decreaseItem(itemName);
+					socketOut.println(output);
+					socketOut.println("DONE");
+				}
+
+				else if (input.equals("GET/TOOL/ORDERS")) {
+					String output = theShop.printOrder();
+					socketOut.println(output);
+					socketOut.println("DONE");
+				}
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private boolean searchByID(String in) {
+		try {
+			Integer.parseInt(in);
+			return true;
+		} catch(NumberFormatException e) {
+			return false;
 		}
 	}
 
