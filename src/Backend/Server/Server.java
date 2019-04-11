@@ -6,11 +6,33 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Server side of the application. Will create thread pool for the clients to use
+ * and create the database for the application
+ * 
+ * @author Antonio Santos, Julian Pinto
+ * @version 1.0
+ * @since April 5, 2019
+ */
 public class Server {
+	/**
+	 * servers socket
+	 */
 	private ServerSocket serverSocket;
+	/**
+	 * pool of threads for the clients to connect to
+	 */
 	private ExecutorService pool;
+	/**
+	 * database of the shop
+	 */
 	private ToolShopDB database;
 
+	/**
+	 * creates the database, assigns the serversocket to its port,
+	 * and creates the pool of threads for the clients
+	 * @param serv port number of the server
+	 */
 	public Server(int serv) {
 		try {
 			database = new ToolShopDB();
@@ -24,6 +46,12 @@ public class Server {
 		}
 	}
 
+	/**
+	 * reads the items from a text file, connects the items to the suppliers
+	 * and transfers it to the database
+	 * @param suppliers list of suppliers
+	 * @return list of items
+	 */
 	private ArrayList<Item> readItems(ArrayList<Supplier> suppliers) {
 
 		ArrayList<Item> items = new ArrayList<Item>();
@@ -55,6 +83,12 @@ public class Server {
 		return items;
 	}
 
+	/**
+	 * searches for a supplier by id number
+	 * @param supplierId suppliers id
+	 * @param suppliers list of the suppliers
+	 * @return reference to the suppler if found
+	 */
 	private Supplier findSupplier(int supplierId, ArrayList<Supplier> suppliers) {
 		Supplier theSupplier = null;
 		for (Supplier s : suppliers) {
@@ -66,6 +100,12 @@ public class Server {
 		return theSupplier;
 	}
 
+	/**
+	 * reads the suppliers from the text file and transfers 
+	 * the information to the database
+	 * @param suppliers list of suppliers to add to
+	 * @return list of updated suppliers
+	 */
 	private ArrayList<Supplier> readSuppliers(ArrayList<Supplier> suppliers) {
 
 		try {
@@ -86,6 +126,10 @@ public class Server {
 		return suppliers;
 	}
 
+	/**
+	 * creates teh suppliers and inventory then runs the server 
+	 * and creates threads for any new client that connects to it
+	 */
 	private void communicate() {
 		ArrayList<Supplier> suppliers = new ArrayList<>();
 		suppliers = this.readSuppliers(suppliers);
@@ -102,6 +146,10 @@ public class Server {
 		}
 	}
 
+	/**
+	 * creates the server and runs it
+	 * @param args console inputs
+	 */
 	public static void main(String[] args) {
 		Server shopServer = new Server(8897);
 		shopServer.communicate();
