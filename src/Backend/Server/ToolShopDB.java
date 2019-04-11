@@ -100,7 +100,7 @@ public class ToolShopDB implements IDBCredentials {
         }
     }
 
-    public String getItems() {
+    public String getItemList() {
         try {
             Statement stmt = conn.createStatement();
             String query = "SELECT * FROM ITEMS";
@@ -112,9 +112,109 @@ public class ToolShopDB implements IDBCredentials {
             }
             return sb.toString();
         } catch (SQLException sqle) {
+            System.out.println("Error getting item list");
+            sqle.printStackTrace();
+        }
+        return "Error getting list of tools";
+    }
+
+    public String getItem(String n) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE name = '" + n + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            String item = "";
+            if (rs.next()) {
+                item = "Item ID: " + rs.getInt("id") + ", Item Name: " + rs.getString("name") + ", Item Quantity: "
+                        + rs.getInt("quantity") + ", Item Price: $" + String.format("%.2f", rs.getDouble("price"))
+                        + ", Supplier ID: " + rs.getInt("suppID");
+            }
+            return item;
+        } catch (SQLException sqle) {
             System.out.println("Error getting item");
             sqle.printStackTrace();
         }
-        return "";
+        return "Error searching of tool";
     }
+
+    public String getItem(int i) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE id = '" + i + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            String item = "";
+            if (rs.next()) {
+                item = "Item ID: " + rs.getInt("id") + ", Item Name: " + rs.getString("name") + ", Item Quantity: "
+                        + rs.getInt("quantity") + ", Item Price: $" + String.format("%.2f", rs.getDouble("price"))
+                        + ", Supplier ID: " + rs.getInt("suppID");
+            }
+            return item;
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "Error searching of tool";
+    }
+
+    public String getItemQuantity(String n) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE name = '" + n + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            String itemQ = "";
+            if (rs.next()) {
+                itemQ = "Item Quantity: " + rs.getInt("quantity");
+            }
+            return itemQ;
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "Error searching of tool";
+    }
+
+    public String getItemQuantity(int i) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE id = '" + i + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            String itemQ = "";
+            if (rs.next()) {
+                itemQ = "Item Quantity: " + rs.getInt("quantity");
+            }
+            return itemQ;
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "Error searching of tool";
+    }
+
+    public String decreaseItem(String n) {
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * FROM ITEMS WHERE name = '" + n + "' LIMIT 1";
+            rs = stmt.executeQuery(query);
+            int quantity = 0;
+            if (rs.next()) {
+                quantity = rs.getInt("quantity");
+                System.out.println(quantity);
+            }
+            if (quantity < 1) {
+                return "Not enough quantity";
+            }
+            quantity -= 1;
+            System.out.println(quantity);
+            Statement myStmt = conn.createStatement();
+            String myQuery = "UPDATE ITEMS SET quantity = '" + quantity + "' WHERE name = '" + n + "'";
+            myStmt.executeUpdate(myQuery);
+
+            return "Item Decreased";
+        } catch (SQLException sqle) {
+            System.out.println("Error getting item");
+            sqle.printStackTrace();
+        }
+        return "Error decreasing item quantity";
+    }
+
 }

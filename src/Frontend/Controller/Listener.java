@@ -31,14 +31,32 @@ public class Listener {
      * @return the string to be sent to the frame.
      */
     public String actionPerformed(String s) {
+        String[] split = s.split("-", 2);
         if (s.equals("GET/TOOL/LIST")) {
             try {
                 return client.displayTools();
             } catch (IOException ioe) {
                 return "Error getting list of tools";
             }
+        } else if (split[0].equals("GET/TOOL/SEARCH")) {
+            try {
+                return client.searchItem(split[1]);
+            } catch (IOException ioe) {
+                return "Error searching for tool";
+            }
+        } else if (split[0].equals("GET/TOOL/QUANTITY")) {
+            try {
+                return client.itemQuantity(split[1]);
+            } catch (IOException ioe) {
+                return "Error searching for tool";
+            }
+        } else if (split[0].equals("TOOL/DECREASE")) {
+            try {
+                return client.decreaseTool(split[1]);
+            } catch (IOException ioe) {
+                return "Error decreasing item quantity";
+            }
         }
         return "";
     }
-
 }

@@ -2,24 +2,21 @@ package Backend.Server;
 
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
-	private BufferedReader socketIn;
-	private PrintWriter socketOut;
 	private ServerSocket serverSocket;
-	private Socket socket;
-	ToolShopDB database;
+	private ExecutorService pool;
+	private ToolShopDB database;
 
 	public Server(int serv) {
 		try {
 			database = new ToolShopDB();
 			serverSocket = new ServerSocket(serv);
+			pool = Executors.newCachedThreadPool();
 			System.out.println("Shop is running");
-			socket = serverSocket.accept();
-			socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			socketOut = new PrintWriter(socket.getOutputStream(), true);
 
 		} catch (IOException e) {
 			System.err.println("Server Error");
@@ -89,30 +86,25 @@ public class Server {
 		return suppliers;
 	}
 
-	private void communicate(Shop theShop) {
-		String input = "";
+	private void communicate() {
+		ArrayList<Supplier> suppliers = new ArrayList<>();
+		suppliers = this.readSuppliers(suppliers);
+		Inventory theInventory = new Inventory(this.readItems(suppliers));
 		while (true) {
 			try {
-				input = socketIn.readLine();
-				if (input.equals("GET/TOOL/LIST")) {
-					String output = database.getItems();
-					socketOut.println(output);
-					socketOut.println("DONE");
-				}
+				Shop theShop = new Shop(theInventory, suppliers, serverSocket.accept());
+				theShop.setDatabase(database);
+				pool.execute(theShop);
 			} catch (IOException e) {
 				e.printStackTrace();
+				pool.shutdown();
 			}
 		}
 	}
 
 	public static void main(String[] args) {
 		Server shopServer = new Server(8897);
-		ArrayList<Supplier> suppliers = new ArrayList<>();
-		suppliers = shopServer.readSuppliers(suppliers);
-		Inventory theInventory = new Inventory(shopServer.readItems(suppliers));
-		Shop theShop = new Shop(theInventory, suppliers);
-
-		shopServer.communicate(theShop);
+		shopServer.communicate();
 
 	}
 }
