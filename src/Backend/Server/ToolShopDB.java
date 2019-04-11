@@ -190,7 +190,7 @@ public class ToolShopDB implements IDBCredentials {
         return "Error searching of tool";
     }
 
-    synchronized public String decreaseItem(String n) {
+    synchronized public String decreaseItem(String n, int amount) {
         try {
             Statement stmt = conn.createStatement();
             String query = "SELECT * FROM ITEMS WHERE name = '" + n + "' LIMIT 1";
@@ -198,13 +198,15 @@ public class ToolShopDB implements IDBCredentials {
             int quantity = 0;
             if (rs.next()) {
                 quantity = rs.getInt("quantity");
-                System.out.println(quantity);
             }
-            if (quantity < 1) {
+            if (quantity < amount) {
                 return "Not enough quantity";
             }
-            quantity -= 1;
-            System.out.println(quantity);
+            quantity -= amount;
+            if (quantity < 40) {
+                quantity = 50 - quantity;
+                System.out.println("Stock for " + n + " has been replenished.");
+            }
             Statement myStmt = conn.createStatement();
             String myQuery = "UPDATE ITEMS SET quantity = '" + quantity + "' WHERE name = '" + n + "'";
             myStmt.executeUpdate(myQuery);
