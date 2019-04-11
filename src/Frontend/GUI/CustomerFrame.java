@@ -36,8 +36,12 @@ public class CustomerFrame extends JFrame {
      */
     private Listener listener;
 
-    public CustomerFrame(int width, int height) {
-        checkLogin();
+    public CustomerFrame(int width, int height, Listener l) {
+        listener = l;
+        boolean check = checkLogin();
+        if (check == false) {
+            dispose();
+        }
         setTitle("ToolShop");
         setSize(width, height);
         p = new JPanel();
@@ -57,7 +61,7 @@ public class CustomerFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void checkLogin() {
+    public boolean checkLogin() {
         JLabel label_login = new JLabel("Username:");
         JTextField username = new JTextField();
 
@@ -73,19 +77,22 @@ public class CustomerFrame extends JFrame {
             String uN = username.getText();
             String pW = password.getText();
             if (uN == null || pW == null) {
-                return;
+                return false;
             }
-            String loggingIn = listener.login("LOGIN"); // Sends a string to the
-                                                        // socket for the
+            String loggingIn = listener.actionPerformed("LOGIN-" + uN + "-" + pW); // Sends a string to the
+            // socket for the
             // server to hear.
-            System.out.println(uN + pW);
+            System.out.println(loggingIn + uN + pW);
             if (loggingIn.equals("") || loggingIn.equals("Invalid")) {
                 JOptionPane.showMessageDialog(null, "Invalid Login Information", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return false;
             } else {
                 JOptionPane.showMessageDialog(null, "Logged in", "Success", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
+                return true;
             }
         }
+
+        return false;
     }
 
     /**

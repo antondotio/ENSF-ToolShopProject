@@ -230,6 +230,7 @@ public class Shop implements Runnable {
 		while (true) {
 			try {
 				input = socketIn.readLine();
+				System.out.println(input);
 				if (input.equals("GET/TOOL/LIST")) {
 					String output = database.getItemList();
 					socketOut.println(output);
@@ -274,6 +275,7 @@ public class Shop implements Runnable {
 					String username = split[0];
 					String password = split[1];
 					String output = users.checkLogin(username, password);
+					System.out.println(username + password);
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}

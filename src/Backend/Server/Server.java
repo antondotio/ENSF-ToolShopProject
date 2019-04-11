@@ -7,8 +7,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Server side of the application. Will create thread pool for the clients to use
- * and create the database for the application
+ * Server side of the application. Will create thread pool for the clients to
+ * use and create the database for the application
  * 
  * @author Antonio Santos, Julian Pinto
  * @version 1.0
@@ -30,8 +30,9 @@ public class Server {
 	private UserDB users;
 
 	/**
-	 * creates the database, assigns the serversocket to its port,
-	 * and creates the pool of threads for the clients
+	 * creates the database, assigns the serversocket to its port, and creates the
+	 * pool of threads for the clients
+	 * 
 	 * @param serv port number of the server
 	 */
 	public Server(int serv) {
@@ -49,8 +50,9 @@ public class Server {
 	}
 
 	/**
-	 * reads the items from a text file, connects the items to the suppliers
-	 * and transfers it to the database
+	 * reads the items from a text file, connects the items to the suppliers and
+	 * transfers it to the database
+	 * 
 	 * @param suppliers list of suppliers
 	 * @return list of items
 	 */
@@ -88,8 +90,9 @@ public class Server {
 
 	/**
 	 * searches for a supplier by id number
+	 * 
 	 * @param supplierId suppliers id
-	 * @param suppliers list of the suppliers
+	 * @param suppliers  list of the suppliers
 	 * @return reference to the suppler if found
 	 */
 	private Supplier findSupplier(int supplierId, ArrayList<Supplier> suppliers) {
@@ -104,8 +107,9 @@ public class Server {
 	}
 
 	/**
-	 * reads the suppliers from the text file and transfers 
-	 * the information to the database
+	 * reads the suppliers from the text file and transfers the information to the
+	 * database
+	 * 
 	 * @param suppliers list of suppliers to add to
 	 * @return list of updated suppliers
 	 */
@@ -130,8 +134,8 @@ public class Server {
 	}
 
 	/**
-	 * creates teh suppliers and inventory then runs the server 
-	 * and creates threads for any new client that connects to it
+	 * creates teh suppliers and inventory then runs the server and creates threads
+	 * for any new client that connects to it
 	 */
 	private void communicate() {
 		ArrayList<Supplier> suppliers = new ArrayList<>();
@@ -141,6 +145,7 @@ public class Server {
 			try {
 				Shop theShop = new Shop(theInventory, suppliers, serverSocket.accept());
 				theShop.setDatabase(database);
+				theShop.setUsers(users);
 				pool.execute(theShop);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -151,6 +156,7 @@ public class Server {
 
 	/**
 	 * creates the server and runs it
+	 * 
 	 * @param args console inputs
 	 */
 	public static void main(String[] args) {
