@@ -12,6 +12,7 @@ public class Shop implements Runnable {
 	private PrintWriter socketOut;
 	private Socket socket;
 	private ToolShopDB database;
+	private UserDB users;
 
 	public Shop(Inventory inventory, ArrayList<Supplier> suppliers, Socket s) {
 
@@ -100,6 +101,10 @@ public class Shop implements Runnable {
 		this.database = db;
 	}
 
+	public void setUsers(UserDB userdb) {
+		users = userdb;
+	}
+
 	private boolean searchByID(String in) {
 		try {
 			Integer.parseInt(in);
@@ -150,6 +155,15 @@ public class Shop implements Runnable {
 					String itemName = split[0];
 					int amount = Integer.parseInt(split[1]);
 					String output = database.decreaseItem(itemName, amount);
+					socketOut.println(output);
+					socketOut.println("DONE");
+				}
+
+				else if (input.equals("LOGIN")) {
+					String[] split = socketIn.readLine().split("-");
+					String username = split[0];
+					String password = split[1];
+					String output = users.checkLogin(username, password);
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}

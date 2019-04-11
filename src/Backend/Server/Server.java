@@ -10,10 +10,12 @@ public class Server {
 	private ServerSocket serverSocket;
 	private ExecutorService pool;
 	private ToolShopDB database;
+	private UserDB users;
 
 	public Server(int serv) {
 		try {
 			database = new ToolShopDB();
+			users = new UserDB();
 			serverSocket = new ServerSocket(serv);
 			pool = Executors.newCachedThreadPool();
 			System.out.println("Shop is running");
@@ -46,6 +48,7 @@ public class Server {
 					// database.insertItem(Integer.parseInt(temp[0]), temp[1],
 					// Integer.parseInt(temp[2]),
 					// Double.parseDouble(temp[3]), theSupplier.getSupId());
+
 					// items already inserted in database
 				}
 			}
@@ -103,7 +106,7 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
-		Server shopServer = new Server(8897);
+		Server shopServer = new Server(9788);
 		shopServer.communicate();
 
 	}

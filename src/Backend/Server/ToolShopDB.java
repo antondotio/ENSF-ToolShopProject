@@ -2,11 +2,29 @@ package Backend.Server;
 
 import java.sql.*;
 
+/**
+ * The Database controller. Responsible for updating and creating the database
+ * as well as holding the functions for retrieving information form the database
+ * 
+ * @author Antonio Santos, Julian Pinto
+ * @version 1.0
+ * @since April 11, 2019
+ */
 public class ToolShopDB implements IDBCredentials {
 
+    /**
+     * the connection to the database.
+     */
     private Connection conn;
+    /**
+     * The result set for the item searched for/ updated.
+     */
     private ResultSet rs;
 
+    /**
+     * default constructor for the database controller. connects the database to the
+     * program.
+     */
     public ToolShopDB() {
         try {
             conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
@@ -21,6 +39,9 @@ public class ToolShopDB implements IDBCredentials {
         }
     }
 
+    /**
+     * creates the items table
+     */
     public void createItemTable() {
         String sql = "CREATE TABLE ITEMS " + "(id INTEGER not NULL, " + " name VARCHAR(255), "
                 + " quantity INTEGER not NULL, " + " price DOUBLE not NULL, " + " suppID INTEGER not NULL, "
@@ -37,6 +58,9 @@ public class ToolShopDB implements IDBCredentials {
         System.out.println("Created item table in given database...");
     }
 
+    /**
+     * creates the suppliers table
+     */
     public void createSupplierTable() {
         String sql = "CREATE TABLE SUPPLIERS " + "(id INTEGER not NULL, " + " name VARCHAR(255), "
                 + " address VARCHAR(255), " + " contName VARCHAR(255), " + " PRIMARY KEY (id))";
@@ -52,6 +76,9 @@ public class ToolShopDB implements IDBCredentials {
         System.out.println("Created supplier table in given database...");
     }
 
+    /**
+     * creates the database
+     */
     public void createDatabase() throws SQLException {
         String sql_stmt = "CREATE DATABASE IF NOT EXISTS `toolshop_db`;";
         Statement stmt = conn.createStatement();
@@ -63,6 +90,15 @@ public class ToolShopDB implements IDBCredentials {
         System.out.println("toolshop_db has successfully been created");
     }
 
+    /**
+     * inserts the item into the database.
+     * 
+     * @param id       id of item
+     * @param name     name of item
+     * @param quantity quantity of item
+     * @param price    price of item
+     * @param suppID   supplier id of item
+     */
     public void insertItem(int id, String name, int quantity, double price, int suppID) {
         try {
             String query = "INSERT INTO ITEMS (id, name, quantity, price, suppID) values(?, ?, ?, ?, ?)";
@@ -82,6 +118,14 @@ public class ToolShopDB implements IDBCredentials {
         }
     }
 
+    /**
+     * inserts the supplier to the database
+     * 
+     * @param id       id of supplier
+     * @param name     company name of supplier
+     * @param address  address of supplier
+     * @param contName contact name for supplier
+     */
     public void insertSupplier(int id, String name, String address, String contName) {
         try {
             String query = "INSERT INTO SUPPLIERS (id, name, address, contName) values(?, ?, ?, ?)";
@@ -100,6 +144,11 @@ public class ToolShopDB implements IDBCredentials {
         }
     }
 
+    /**
+     * Gets all the items from the database and turns it into a list
+     * 
+     * @return String for the list of items, or an error otherwise
+     */
     public String getItemList() {
         try {
             Statement stmt = conn.createStatement();
@@ -118,6 +167,12 @@ public class ToolShopDB implements IDBCredentials {
         return "Error getting list of tools";
     }
 
+    /**
+     * Gets a specific item that is being searched for, using the name
+     * 
+     * @param n name of item being searched
+     * @return String of the information about the item, error otherwise
+     */
     public String getItem(String n) {
         try {
             Statement stmt = conn.createStatement();
@@ -137,6 +192,12 @@ public class ToolShopDB implements IDBCredentials {
         return "Error searching of tool";
     }
 
+    /**
+     * Gets a specific item that is being searched for, using the id
+     * 
+     * @param i id of item being searched
+     * @return String of the information about the item, error otherwise
+     */
     public String getItem(int i) {
         try {
             Statement stmt = conn.createStatement();
@@ -156,6 +217,12 @@ public class ToolShopDB implements IDBCredentials {
         return "Error searching of tool";
     }
 
+    /**
+     * Gets the quantity of a certain item using the name
+     * 
+     * @param n name of item
+     * @return String for the quantity, error otherwise
+     */
     public String getItemQuantity(String n) {
         try {
             Statement stmt = conn.createStatement();
@@ -173,6 +240,12 @@ public class ToolShopDB implements IDBCredentials {
         return "Error searching of tool";
     }
 
+    /**
+     * Gets the quantity of a certain item using the id
+     * 
+     * @param i id of the item
+     * @return String for the quantity, error otherwise
+     */
     public String getItemQuantity(int i) {
         try {
             Statement stmt = conn.createStatement();
@@ -190,6 +263,13 @@ public class ToolShopDB implements IDBCredentials {
         return "Error searching of tool";
     }
 
+    /**
+     * Decreases the quantity of a certain item
+     * 
+     * @param n      name of the item
+     * @param amount amount to be decreased
+     * @return returns the status of the function.
+     */
     synchronized public String decreaseItem(String n, int amount) {
         try {
             Statement stmt = conn.createStatement();
@@ -203,20 +283,37 @@ public class ToolShopDB implements IDBCredentials {
                 return "Not enough quantity";
             }
             quantity -= amount;
-            if (quantity < 40) {
-                quantity = 50 - quantity;
-                System.out.println("Stock for " + n + " has been replenished.");
-            }
             Statement myStmt = conn.createStatement();
             String myQuery = "UPDATE ITEMS SET quantity = '" + quantity + "' WHERE name = '" + n + "'";
             myStmt.executeUpdate(myQuery);
+            if (quantity < 40) {
+                updateQuantity(n, quantity);
+            }
 
             return "Item Decreased";
         } catch (SQLException sqle) {
-            System.out.println("Error getting item");
+            System.out.println("Error decreasing item quantity");
             sqle.printStackTrace();
         }
         return "Error decreasing item quantity";
     }
 
+    /**
+     * updates the quantity if the quantity of an item is below 40
+     * 
+     * @param n        name of item
+     * @param quantity quantity of item.
+     */
+    public void updateQuantity(String n, int quantity) {
+        try {
+            quantity = 50 - quantity;
+            System.out.println("Stock for " + n + " has been replenished.");
+            Statement myStmt = conn.createStatement();
+            String myQuery = "UPDATE ITEMS SET quantity = '" + quantity + "' WHERE name = '" + n + "'";
+            myStmt.executeUpdate(myQuery);
+        } catch (SQLException sqle) {
+            System.out.println("Error restocking item");
+            sqle.printStackTrace();
+        }
+    }
 }
