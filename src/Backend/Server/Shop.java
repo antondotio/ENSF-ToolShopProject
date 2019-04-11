@@ -146,8 +146,10 @@ public class Shop implements Runnable {
 				}
 
 				else if (input.equals("TOOL/DECREASE")) {
-					String itemName = socketIn.readLine();
-					String output = database.decreaseItem(itemName);
+					String[] split = socketIn.readLine().split("-");
+					String itemName = split[0];
+					int amount = Integer.parseInt(split[1]);
+					String output = database.decreaseItem(itemName, amount);
 					socketOut.println(output);
 					socketOut.println("DONE");
 				}

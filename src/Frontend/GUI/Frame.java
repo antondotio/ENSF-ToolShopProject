@@ -180,22 +180,24 @@ public class Frame extends JFrame {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                String itemName = JOptionPane
-                        .showInputDialog("Enter the name of the item you wish to decrease the quantity of.");
+                String itemName = JOptionPane.showInputDialog(
+                        "Enter the name of the item you wish to decrease the quantity of\nand the quantity, separated by a dash. Example: Inny Outies-34.");
                 if (itemName == null) {
                     return;
                 }
                 String decrease = listener.actionPerformed("TOOL/DECREASE-" + itemName); // Sends a string to the socket
                                                                                          // for the
                 // server to hear.
+                String[] split = itemName.split("-");
+                String name = split[0];
                 if (decrease.equals("") || decrease.equals("Error decreasing item quantity")) {
                     System.err.println("Error decreasing item quantity");
                 } else if (decrease.equals("Not enough quantity")) {
                     JOptionPane.showMessageDialog(null,
-                            "The quantity of " + itemName + " is not high enough to be decreased.", "Item Quantity ",
+                            "The quantity of " + name + " is not high enough to be decreased.", "Item Quantity ",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(null, ("Item quantity of " + itemName + " has been decreased."),
+                    JOptionPane.showMessageDialog(null, ("Item quantity of " + name + " has been decreased."),
                             "Item Decreased", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
