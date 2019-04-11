@@ -190,7 +190,7 @@ public class ToolShopDB implements IDBCredentials {
         return "Error searching of tool";
     }
 
-    public String decreaseItem(String n) {
+    synchronized public String decreaseItem(String n) {
         try {
             Statement stmt = conn.createStatement();
             String query = "SELECT * FROM ITEMS WHERE name = '" + n + "' LIMIT 1";
