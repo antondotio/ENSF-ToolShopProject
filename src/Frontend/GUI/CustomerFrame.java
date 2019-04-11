@@ -57,8 +57,35 @@ public class CustomerFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public void checkLogin(){
-        Login login = new Login(listener);
+    public void checkLogin() {
+        JLabel label_login = new JLabel("Username:");
+        JTextField username = new JTextField();
+
+        JLabel label_password = new JLabel("Password:");
+        JPasswordField password = new JPasswordField();
+
+        Object[] array = { label_login, username, label_password, password };
+
+        int res = JOptionPane.showConfirmDialog(null, array, "Login", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (res == JOptionPane.OK_OPTION) {
+            String uN = username.getText();
+            String pW = password.getText();
+            if (uN == null || pW == null) {
+                return;
+            }
+            String loggingIn = listener.login("LOGIN"); // Sends a string to the
+                                                        // socket for the
+            // server to hear.
+            System.out.println(uN + pW);
+            if (loggingIn.equals("") || loggingIn.equals("Invalid")) {
+                JOptionPane.showMessageDialog(null, "Invalid Login Information", "Invalid", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Logged in", "Success", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            }
+        }
     }
 
     /**

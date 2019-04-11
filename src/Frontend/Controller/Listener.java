@@ -31,8 +31,6 @@ public class Listener {
      * @return the string to be sent to the frame.
      */
     public String actionPerformed(String s) {
-        System.out.println(s + "hi");
-
         String[] split = s.split("-", 2);
         if (s.equals("GET/TOOL/LIST")) {
             try {
@@ -61,6 +59,19 @@ public class Listener {
         } else if (split[0].equals("LOGIN")) {
             try {
                 System.out.println(split[1] + "hi");
+                return client.login(split[1]);
+            } catch (IOException ioe) {
+                return "Error logging in";
+            }
+        }
+        return "";
+    }
+
+    public String login(String s) {
+        String[] split = s.split("-", 2);
+        if (split[0].equals("LOGIN")) {
+            try {
+                System.out.println("WHAT THE FUCK?!?!?!?!");
                 return client.login(split[1]);
             } catch (IOException ioe) {
                 return "Error logging in";
