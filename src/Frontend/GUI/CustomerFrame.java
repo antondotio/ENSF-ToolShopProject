@@ -38,10 +38,10 @@ public class CustomerFrame extends JFrame {
 
     public CustomerFrame(int width, int height, Listener l) {
         listener = l;
-        boolean check = checkLogin();
-        if (check == false) {
-            dispose();
-        }
+        // boolean check = checkLogin();
+        // if (check == false) {
+        // dispose();
+        // }
         setTitle("ToolShop");
         setSize(width, height);
         p = new JPanel();
