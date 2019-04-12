@@ -77,7 +77,6 @@ public class Client {
         StringBuilder searchResponse = new StringBuilder();
         while (!response.equals("DONE")) {
             searchResponse.append(response);
-            searchResponse.append("\n");
             response = socketIn.readLine();
         }
         return searchResponse.toString();
@@ -97,7 +96,6 @@ public class Client {
         StringBuilder searchResponse = new StringBuilder();
         while (!response.equals("DONE")) {
             searchResponse.append(response);
-            searchResponse.append("\n");
             response = socketIn.readLine();
         }
         return searchResponse.toString();

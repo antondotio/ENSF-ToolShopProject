@@ -165,6 +165,8 @@ public class CustomerFrame extends JFrame {
                                                                                              // socket for the
                 // server to hear.
                 if (toolSearched.equals("") || toolSearched.equals("Error searching of tool")) {
+                    JOptionPane.showMessageDialog(null, "Error searching for tool", "Item Search",
+                            JOptionPane.ERROR_MESSAGE);
                     System.err.println("Error searching for tool");
                 } else {
                     JOptionPane.showMessageDialog(null, toolSearched, "Item found", JOptionPane.INFORMATION_MESSAGE);
@@ -193,6 +195,8 @@ public class CustomerFrame extends JFrame {
                 String[] split = itemName.split("-");
                 String name = split[0];
                 if (decrease.equals("") || decrease.equals("Error decreasing item quantity")) {
+                    JOptionPane.showMessageDialog(null, "Error searching for tool", "Item Buy",
+                            JOptionPane.ERROR_MESSAGE);
                     System.err.println("Error decreasing item quantity");
                 } else if (decrease.equals("Not enough quantity")) {
                     JOptionPane.showMessageDialog(null,
