@@ -230,7 +230,7 @@ public class Shop implements Runnable {
 		while (true) {
 			try {
 				input = socketIn.readLine();
-				System.out.println(input);
+				System.out.println(input + "hoe");
 				if (input.equals("GET/TOOL/LIST")) {
 					String output = database.getItemList();
 					socketOut.println(output);

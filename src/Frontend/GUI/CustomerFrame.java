@@ -67,8 +67,9 @@ public class CustomerFrame extends JFrame {
 
         JLabel label_password = new JLabel("Password:");
         JPasswordField password = new JPasswordField();
+        JButton register = new JButton("Register New User");
 
-        Object[] array = { label_login, username, label_password, password };
+        Object[] array = { label_login, username, label_password, password, register };
 
         int res = JOptionPane.showConfirmDialog(null, array, "Login", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);

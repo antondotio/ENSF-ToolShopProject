@@ -49,6 +49,7 @@ public class Client {
      * Asks server to get list of items
      * 
      * @return list of items
+     * @throws IOEexception throws input output exception
      */
     public String displayTools() throws IOException {
         sendString("GET/TOOL/LIST");
@@ -62,6 +63,13 @@ public class Client {
         return list.toString();
     }
 
+    /**
+     * Asks server to retrieve certain item
+     * 
+     * @param search name or id of item to be searchd
+     * @return String of information about items
+     * @throws IOException throws input out put exception
+     */
     public String searchItem(String search) throws IOException {
         sendString("GET/TOOL/SEARCH");
         sendString(search);
@@ -75,6 +83,13 @@ public class Client {
         return searchResponse.toString();
     }
 
+    /**
+     * Asks server to return quantity of an item
+     * 
+     * @param itemQ name or id of item
+     * @return String of information about quantity
+     * @throws IOException throws input output exception
+     */
     public String itemQuantity(String itemQ) throws IOException {
         sendString("GET/TOOL/QUANTITY");
         sendString(itemQ);
@@ -88,6 +103,13 @@ public class Client {
         return searchResponse.toString();
     }
 
+    /**
+     * Tells server to decrease quantity of item
+     * 
+     * @param itemName name of item
+     * @return status of function
+     * @throws IOException throws input output exceptions
+     */
     public String decreaseTool(String itemName) throws IOException {
         sendString("TOOL/DECREASE");
         sendString(itemName);
@@ -114,6 +136,11 @@ public class Client {
         return loginResponse.toString();
     }
 
+    /**
+     * Sends string to server and flushes it after
+     * 
+     * @param s string to be sent
+     */
     public void sendString(String s) {
         socketOut.println(s);
         socketOut.flush();
