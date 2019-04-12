@@ -49,7 +49,7 @@ public class Client {
      * Asks server to get list of items
      * 
      * @return list of items
-     * @throws IOEexception throws input output exception
+     * @throws IOException throws input output exception
      */
     public String displayTools() throws IOException {
         sendString("GET/TOOL/LIST");

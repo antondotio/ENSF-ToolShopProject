@@ -78,6 +78,7 @@ public class ToolShopDB implements IDBCredentials {
 
     /**
      * creates the database
+     * @throws SQLException if theres database access error
      */
     public void createDatabase() throws SQLException {
         String sql_stmt = "CREATE DATABASE IF NOT EXISTS `toolshop_db`;";

@@ -36,7 +36,7 @@ public class Supplier {
 	 * @param id suppliers id number
 	 * @param name suppliers name
 	 * @param address suppliers address
-	 * @param cont supplier contact 
+	 * @param contactName supplier contact 
 	 */
 	public Supplier (int id, String name, String address, String contactName) {
 		
