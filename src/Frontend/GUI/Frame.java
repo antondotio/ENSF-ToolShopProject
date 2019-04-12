@@ -192,10 +192,10 @@ public class Frame extends JFrame {
                 String name = split[0];
                 if (decrease.equals("") || decrease.equals("Error decreasing item quantity")) {
                     System.err.println("Error decreasing item quantity");
-                } else if (decrease.equals("Not enough quantity")) {
+                } else if (decrease.equals("Invalid\n")) {
                     JOptionPane.showMessageDialog(null,
                             "The quantity of " + name + " is not high enough to be decreased.", "Item Quantity ",
-                            JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.ERROR_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, ("Item quantity of " + name + " has been decreased."),
                             "Item Decreased", JOptionPane.INFORMATION_MESSAGE);

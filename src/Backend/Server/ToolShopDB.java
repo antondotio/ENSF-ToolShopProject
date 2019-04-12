@@ -280,7 +280,7 @@ public class ToolShopDB implements IDBCredentials {
                 quantity = rs.getInt("quantity");
             }
             if (quantity < amount) {
-                return "Not enough quantity";
+                return "Invalid";
             }
             quantity -= amount;
             Statement myStmt = conn.createStatement();
